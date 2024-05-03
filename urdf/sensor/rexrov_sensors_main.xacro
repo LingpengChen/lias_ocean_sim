@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!-- Note the detailed sensor configuration can be found in $(find uuv_sensor_ros_plugins)/urdf/-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- DVL  -->
+  <xacro:default_dvl_macro
+    namespace="${namespace}"
+    parent_link="${namespace}/base_link"
+    inertial_reference_frame="${inertial_reference_frame}">
+    <origin xyz="-1.4 0 -0.312" rpy="0 ${0.5*pi} 0"/>
+  </xacro:default_dvl_macro>
+
+  <!-- Magnetometer  -->
+  <xacro:default_magnetometer namespace="${namespace}" parent_link="${namespace}/base_link"/>
+
+  <!-- RPT  -->
+  <xacro:default_rpt namespace="${namespace}" parent_link="${namespace}/base_link">
+    <origin xyz="-1.32 0 0.8" rpy="0 0 0"/>
+  </xacro:default_rpt>
+
+  <!-- Pressure  -->
+  <xacro:default_pressure_macro namespace="${namespace}" parent_link="${namespace}/base_link">
+    <origin xyz="-1.32 0.5 0.85" rpy="0 0 0"/>
+  </xacro:default_pressure_macro>
+
+  <!-- IMU  -->
+  <xacro:default_imu_macro
+    namespace="${namespace}"
+    parent_link="${namespace}/base_link"
+    inertial_reference_frame="${inertial_reference_frame}">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:default_imu_macro>
+
+  <!-- Mount cameras -->
+  <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/camera.xacro" />
+  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="right" update_rate="10" width="640" height="480">
+    <origin xyz="1.15 -0.63 0.4" rpy="0 0 0"/>
+  </xacro:camera>
+
+  <!-- <xacro:default_camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left" update_rate="10" width="768" height="492"> -->
+  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left" update_rate="10" width="640" height="480">
+    <origin xyz="1.15 0.63 0.4" rpy="0 0 0"/>
+  </xacro:camera>
+  <!-- <xacro:default_camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left"> -->
+
+
+
+  <!-- Mount a GPS. -->
+  <xacro:default_gps namespace="${namespace}" parent_link="${namespace}/base_link" />
+
+  <!-- Mount a Pose 3D sensor. -->
+  <xacro:default_pose_3d_macro
+    namespace="${namespace}"
+    parent_link="${namespace}/base_link"
+    inertial_reference_frame="${inertial_reference_frame}" />
+
+  <!-- sonar -->
+  <xacro:include filename="$(find caracara_gazebo)/urdf/multibeam_sonar_blueview_p900.xacro" />
+  <xacro:multibeam_blueview_p900_raster_standalone_macro
+            name="blueview_p900" scale="1 1 1" debug="false"
+            sonar_image_topic="sonar_image"
+            sonar_image_raw_topic="sonar_image_raw"
+            maxDistance="20" raySkips="10"
+            plotScaler="0" sensorGain="0.02"
+            writeLog="false" writeFrameInterval="5"
+            artificialVehicleVibration="false"
+            constantReflectivity="true"
+            reflectivityDatabaseFile="variationalReflectivityDatabase.csv"
+            ray_visual="true"/>
+
+  <xacro:multibeam_blueview_p900_link name="$(arg name)" scale="$(arg scale)"/>
+  <joint name="multibeam_sonar_joint" type="fixed">
+    <parent link="${namespace}/base_link"/>
+    <origin xyz="1.2 0 0.2" rpy="0 0 0"/> 
+    <child link="$(arg name)_link"/>
+  </joint>
+  
+</robot>
