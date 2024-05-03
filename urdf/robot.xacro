@@ -174,7 +174,7 @@
 
 
 <!-- sonar -->
-  <xacro:include filename="$(find caracara_gazebo)/urdf/multibeam_sonar_blueview_p900.xacro" />
+  <xacro:include filename="$(find lias_ocean_sim)/urdf/multibeam_sonar_blueview_p900.xacro" />
   <xacro:arg name="standalone" default="false"/>
   <xacro:arg name="gpu_ray" default="false"/>
   <xacro:arg name="name" default="blueview_p900"/>

@@ -178,7 +178,7 @@
     </gazebo>
   </xacro:macro>
 
-  <xacro:macro name="p900_raster_macro"
+  <xacro:macro name="multibeam_blueview_p900_raster_standalone_macro"
                params="name scale sonar_image_topic debug
                sonar_image_raw_topic maxDistance raySkips plotScaler sensorGain writeLog
                writeFrameInterval artificialVehicleVibration constantReflectivity
@@ -199,5 +199,25 @@
     <xacro:multibeam_blueview_p900_visual_ray name="${name}" ray_visual="${ray_visual}" />
   </xacro:macro>
 
+
+
+  <xacro:multibeam_blueview_p900_raster_standalone_macro
+            name="$(arg name)" scale="$(arg scale)" debug="$(arg debug)"
+            sonar_image_topic="$(arg sonar_image_topic)"
+            sonar_image_raw_topic="$(arg sonar_image_raw_topic)"
+            maxDistance="$(arg maxDistance)" raySkips="$(arg raySkips)"
+            plotScaler="$(arg plotScaler)" sensorGain="$(arg sensorGain)"
+            writeLog="$(arg writeLog)" writeFrameInterval="$(arg writeFrameInterval)"
+            artificialVehicleVibration="$(arg artificialVehicleVibration)"
+            constantReflectivity="$(arg constantReflectivity)"
+            reflectivityDatabaseFile="$(arg reflectivityDatabaseFile)"
+            ray_visual="$(arg ray_visual)"/>
+
+  <xacro:multibeam_sonar_standalone_link name="$(arg name)"/>
+  <joint name="multibeam_sonar_joint" type="fixed">
+    <parent link="$(arg name)_standalone_base_link"/>
+    <child link="$(arg name)_link"/>
+  </joint>
+  <xacro:multibeam_blueview_p900_link name="$(arg name)" scale="$(arg scale)"/>
   
 </robot>
