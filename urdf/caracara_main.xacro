@@ -174,12 +174,12 @@
 
 
 <!-- sonar -->
-  <xacro:include filename="$(find lias_ocean_sim)/urdf/multibeam_sonar_blueview_p900.xacro" />
+  <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/sonar/multibeam_sonar_blueview_p900.xacro" />
   <xacro:arg name="standalone" default="false"/>
   <xacro:arg name="gpu_ray" default="false"/>
   <xacro:arg name="name" default="blueview_p900"/>
   <xacro:arg name="maxDistance" default="10"/>
-  <xacro:arg name="raySkips" default="10"/>
+  <xacro:arg name="raySkips" default="1"/>
   <xacro:arg name="scale" default="1 1 1"/>
   <xacro:arg name="sonar_image_topic" default="sonar_image"/>
   <xacro:arg name="sonar_image_raw_topic" default="sonar_image_raw"/>
@@ -197,7 +197,7 @@
   <xacro:arg name="fidelity" default="500"/>
   <xacro:arg name="robot_name" default=""/>
 
-  <xacro:multibeam_blueview_p900_raster_standalone_macro
+  <xacro:p900_raster_macro
             name="$(arg name)" scale="$(arg scale)" debug="$(arg debug)"
             sonar_image_topic="$(arg sonar_image_topic)"
             sonar_image_raw_topic="$(arg sonar_image_raw_topic)"

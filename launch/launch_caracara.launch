@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="name" default="robo_0"/>
+    <arg name="pose" default="1"/>
+
+    <arg name="namespace" default="$(arg name)"/>
+    <arg name="gui" default="true"/>
+    <arg name="paused" default="false"/>
+    <arg name="world_name" default="$(find uuv_dave)/worlds/uuv_dave_ocean_waves.world"/>
+    <arg name="velocity_control" default="true"/>
+    <arg name="debug" default="false"/>
+    <arg name="verbose" default="false"/>
+    <arg name="x" default="4"/>
+    <arg name="y" default="4"/>
+    <arg name="z" default="-93"/>
+    <arg name="roll" default="0"/>
+    <arg name="pitch" default="0"/>
+    <arg name="yaw" default="-1.8"/>
+    
+
+<!-- caracara_gazebo -->
+    <arg name="world" default="sonar_tank.world"/>
+
+    <arg name="standalone" default="true"/>
+    <arg name="robo_name" default="$(arg name)"/>
+
+    <arg name="robo_X" default="$(arg pose)"/>
+    <arg name="robo_y" default="$(arg pose)"/>
+    <arg name="robo_z" default="-90"/>
+    <arg name="robo_roll" default="0"/>
+    <arg name="robo_pitch" default="-0.1"/>
+    <arg name="robo_yaw" default="1.5708"/>
+
+    <arg name="gpu_ray" default="false"/>
+
+    <arg name="maxDistance" default="10"/>
+    <arg name="raySkips" default="1"/>
+    <arg name="sonar_scale" default="'1 1 1'"/>
+    <arg name="sonar_image_topic" default="sonar_image"/>
+    <arg name="sonar_image_raw_topic" default="sonar_image_raw"/>
+    <arg name="ray_visual" default="true"/>
+
+    <arg name="plotScaler" default="0"/>
+    <arg name="sensorGain" default="0.04"/>
+    <arg name="writeLog" default="false"/>
+    <arg name="writeFrameInterval" default="5"/>
+
+    <param name="/$(arg namespace)/robot_description"
+            command="$(find xacro)/xacro '$(find lias_ocean_sim)/urdf/caracara_main.xacro'
+		    debug:=$(arg debug)
+		    namespace:=$(arg namespace)
+            
+		
+            
+            name:=$(arg sonar_name) scale:=$(arg sonar_scale) 
+            sonar_image_topic:=$(arg sonar_image_topic) sonar_image_raw_topic:=$(arg sonar_image_raw_topic)
+
+            raySkips:=$(arg raySkips) 
+            
+            ray_visual:=$(arg ray_visual)"
+            />
+    
+
+
+    <node name="spawn_$(arg sonar_name)" pkg="gazebo_ros" type="spawn_model"
+            args="-param $(arg sonar_name) -urdf -x $(arg robo_X) -y $(arg robo_y) -z $(arg robo_z)
+                -R $(arg robo_roll) -P $(arg robo_pitch) -Y $(arg robo_yaw) -model $(arg namespace) -param /$(arg namespace)/robot_description" />
+
+    <!-- A joint state publisher plugin already is started with the model,
+	 no need to use the default joint state publisher. -->
+    <!-- Robot state publisher subscribes to the custom joint state publisher -->
+
+
+</launch>
