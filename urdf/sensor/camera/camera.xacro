@@ -124,11 +124,11 @@
           <cameraName>${namespace}/camera${suffix}</cameraName>
           <frameName>camera${suffix}_link_optical</frameName>
 
-          <CxPrime>${width}/2</CxPrime>
+          <!-- <CxPrime>${width}/2</CxPrime>
           <Cx>${width}/2</Cx>
-          <Cy>${height}/2</Cy>
+          <Cy>${height}/2</Cy> -->
           <hackBaseline>0</hackBaseline>
-          <focalLength>320.030826</focalLength>
+          <!-- <focalLength>320.030826</focalLength> -->
           <distortionK1>0.0</distortionK1>
           <distortionK2>0.0</distortionK2>
           <distortionK3>0.0</distortionK3>

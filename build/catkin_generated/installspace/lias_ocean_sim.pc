@@ -1,0 +1,8 @@
+prefix=/usr/local
+
+Name: lias_ocean_sim
+Description: Description of lias_ocean_sim
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

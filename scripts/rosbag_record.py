@@ -22,11 +22,12 @@ def record_bag(topics, duration=None, output_path='./my_rosbags/session'):
 
     try:
         if duration is not None:
+            print("Recording will stop after {} seconds.".format(duration))
             # Wait for the specified duration
             time.sleep(duration)
             # Terminate the process
             process.send_signal(signal.SIGINT)
-            print("Recording stopped after {} seconds.".format(duration))
+            print("DONE")
         else:
             # Wait indefinitely until interrupted
             process.wait()
@@ -41,13 +42,15 @@ if __name__ == '__main__':
     # Define the topics to record
     topics = [
         '/rexrov/imu',
-        '/rexrov/rexrov/cameraleft/camera_image',
-        '/rexrov/rexrov/cameraright/camera_image',
+        # '/rexrov/rexrov/cameraleft/camera_image',
+        # '/rexrov/rexrov/cameraright/camera_image',
+        '/rexrov/blueview_p900/sonar_image',
         '/rexrov/pose_gt'
     ]
 
     # Specify the output path and name
-    output_path = './record/rec'
+    # output_path = './record/vio/vio'
+    output_path = './record/sio/sio'
 
     # Start recording, change the duration as needed
-    record_bag(topics, duration=30, output_path=output_path)  # Record for 3 seconds
+    record_bag(topics, duration=60, output_path=output_path)  # Record for 3 seconds
