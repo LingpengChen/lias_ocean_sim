@@ -8,6 +8,8 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH="/home/clp/catkin_ws/src/lias_ocean_sim/build/devel:$CMAKE_PREFIX_PATH"
+export LD_LIBRARY_PATH="/home/clp/catkin_ws/src/lias_ocean_sim/build/devel/lib:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="/home/clp/catkin_ws/src/lias_ocean_sim/build/devel/lib/pkgconfig:$PKG_CONFIG_PATH"
 export PWD='/home/clp/catkin_ws/src/lias_ocean_sim/build'
 export ROSLISP_PACKAGE_DIRECTORIES="/home/clp/catkin_ws/src/lias_ocean_sim/build/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
 export ROS_PACKAGE_PATH="/home/clp/catkin_ws/src/lias_ocean_sim:$ROS_PACKAGE_PATH"
