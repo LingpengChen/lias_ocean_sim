@@ -1,8 +1,0 @@
-prefix=/home/clp/catkin_ws/src/lias_ocean_sim/build/devel
-
-Name: lias_ocean_sim
-Description: Description of lias_ocean_sim
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
