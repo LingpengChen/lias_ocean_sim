@@ -2,7 +2,7 @@
 
   <arg name="x" default="20"/>
   <arg name="y" default="-20"/>
-  <arg name="z" default="-90"/>
+  <arg name="z" default="-93"/>
   <arg name="namespace" default="rexrov"/>
   <arg name="debug" default="0"/>
 

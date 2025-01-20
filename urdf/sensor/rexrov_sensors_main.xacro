@@ -1,16 +1,40 @@
 <?xml version="1.0"?>
 <!-- Note the detailed sensor configuration can be found in $(find uuv_sensor_ros_plugins)/urdf/-->
+<!-- cd ~/catkin_ws/src/uuv_simulator/uuv_sensor_plugins/uuv_sensor_ros_plugins/urdf$  -->
+
+<!-- Please modify the default_dvl_macro in dvl_snippets.xacro -->
+  <!-- <xacro:macro name="default_dvl_macro" params="namespace parent_link *origin inertial_reference_frame">
+    <xacro:dvl_plugin_macro
+      namespace="${namespace}"
+      suffix=""
+      parent_link="${parent_link}"
+      reference_frame="${inertial_reference_frame}"
+      update_rate="${update_rate}"
+      topic="dvl"
+      noise_sigma="${noise_sigma}"
+      noise_amplitude="${noise_amplitude}"
+      scale="1">
+      <xacro:insert_block name="origin" />
+    </xacro:dvl_plugin_macro>
+  </xacro:macro> -->
+
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- DVL  -->
+  <!-- 典型的DVL更新率在4-15Hz之间 -->
+  <!-- 实际数据显示协方差约为3.79e-05，所以噪声标准差≈sqrt(3.79e-05)=0.006 -->
+  <!-- 噪声振幅，影响测量波动范围,通常设置为noise_sigma的2-3倍 -->
   <xacro:default_dvl_macro
     namespace="${namespace}"
     parent_link="${namespace}/base_link"
+    update_rate="20.0"
+    noise_sigma="0.006"
+    noise_amplitude="0.018"
     inertial_reference_frame="${inertial_reference_frame}">
-    <origin xyz="-1.4 0 -0.312" rpy="0 ${0.5*pi} 0"/>
+    <origin xyz="-1 0 -0.8" rpy="0 ${0.5*pi} 0"/>
   </xacro:default_dvl_macro>
 
 
-  <!-- IMU  -->
+  <!-- IMU  50 Hz -->
   <xacro:default_imu_macro
     namespace="${namespace}"
     parent_link="${namespace}/base_link"
@@ -20,48 +44,69 @@
 
   <!-- Mount cameras -->
   <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/camera/camera.xacro" />
-  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="right" update_rate="2" width="1920" height="1080">
-    <origin xyz="1.15 -0.2 0.4" rpy="0 0 0"/>
+  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="right" update_rate="20" width="640" height="480">
+    <origin xyz="1.15 0.2 0.4" rpy="0 0.4 0"/>
   </xacro:camera>
 
-  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left" update_rate="2" width="1920" height="1080">
-    <origin xyz="1.15 0.2 0.4" rpy="0 0 0"/>
-  </xacro:camera>
+  <!-- <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left" update_rate="24" width="640" height="360">
+    <origin xyz="1.15 0.2 0.4" rpy="0 0.4 0"/>
+  </xacro:camera> -->
   <!-- <xacro:default_camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left"> -->
 
 
 
   <!-- Mount a GPS. -->
-  <xacro:default_gps namespace="${namespace}" parent_link="${namespace}/base_link" />
+  <!-- <xacro:default_gps namespace="${namespace}" parent_link="${namespace}/base_link" /> -->
 
-  <!-- Mount a Pose 3D sensor. -->
+  <!-- Mount a Pose 3D sensor. REALLY REALLY important for the controller!!! -->
   <xacro:default_pose_3d_macro
     namespace="${namespace}"
     parent_link="${namespace}/base_link"
     inertial_reference_frame="${inertial_reference_frame}" />
 
   <!-- sonar -->
-  <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/sonar/multibeam_sonar_blueview_p900.xacro" />
+  <!-- <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/sonar/multibeam_sonar_blueview_p900.xacro" />
   
-  <xacro:multibeam_blueview_p900_ray_macro 
+  <xacro:sonar_visualization_macro_no_blue_ray 
     name="blueview_p900" 
     scale="1 1 1" 
     debug="false" 
     sonar_image_topic="sonar_image" 
     sonar_image_raw_topic="sonar_image_raw" 
     robot_name="rexrov" 
-    maxDistance="20" 
+    maxDistance="10" 
     raySkips="1" 
     plotScaler="0" 
     sensorGain="0.02" 
     writeLog="false" 
     writeFrameInterval="5" 
-    gaussian_noise_mean="0。0" 
+    gaussian_noise_mean="0.0" 
     gaussian_noise_stddev="0.0" 
     fidelity="500" 
     robot_link="${namespace}/base_link" 
     ray_visual="true">
-    <origin xyz="1.2 0 0.2" rpy="0 0 0"/>
-  </xacro:multibeam_blueview_p900_ray_macro>
+    <origin xyz="1.2 0 -0.65" rpy="0 0 0"/>
+  </xacro:sonar_visualization_macro_no_blue_ray> -->
+
+  <!-- <xacro:sonar_visualization_macro 
+    name="blueview_p900" 
+    scale="1 1 1" 
+    debug="false" 
+    sonar_image_topic="sonar_image" 
+    sonar_image_raw_topic="sonar_image_raw" 
+    robot_name="rexrov" 
+    maxDistance="10" 
+    raySkips="1" 
+    plotScaler="0" 
+    sensorGain="0.02" 
+    writeLog="false" 
+    writeFrameInterval="5" 
+    gaussian_noise_mean="0.0" 
+    gaussian_noise_stddev="0.0" 
+    fidelity="500" 
+    robot_link="${namespace}/base_link" 
+    ray_visual="true">
+    <origin xyz="1.2 0 -0.65" rpy="0 0 0"/>
+  </xacro:sonar_visualization_macro> -->
 
 </robot>

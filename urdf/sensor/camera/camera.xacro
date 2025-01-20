@@ -34,7 +34,7 @@
       topic="camera"
       mass="0.1"
       update_rate="${update_rate}"
-      hfov="1.5707"
+      hfov="0.785"
       width="${width}"
       height="${height}"
       stddev="0.02"
@@ -109,7 +109,7 @@
           <!--定义远、近剪裁面，不会渲染远、近剪裁平面之外的对象-->
           <clip>
             <near>0.05</near>
-            <far>3000</far>
+            <far>50</far>
           </clip>
           <!--噪音标签，定义噪音模型，它将应用到生成的图片上-->
           <noise>

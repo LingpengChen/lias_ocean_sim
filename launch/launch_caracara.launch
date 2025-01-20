@@ -36,6 +36,7 @@
 
     <arg name="maxDistance" default="10"/>
     <arg name="raySkips" default="1"/>
+    <arg name="sonar_name" default="sonar"/>
     <arg name="sonar_scale" default="'1 1 1'"/>
     <arg name="sonar_image_topic" default="sonar_image"/>
     <arg name="sonar_image_raw_topic" default="sonar_image_raw"/>

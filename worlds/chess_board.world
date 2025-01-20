@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="underwater_world">
+    <!-- 全局光源 -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- 水下环境 -->
+    <scene>
+      <ambient>0.0 0.0 0.4 1</ambient>
+      <background>0.0 0.0 0.4 1</background>
+      <shadows>false</shadows>
+    </scene>
+
+    <!-- 棋盘模型 -->
+    <include>
+      <uri>model://chess_board</uri>
+      <name>chess_board</name>
+      <pose>5 0 0 0 0 0</pose>
+      <scale>
+        <x>5</x>    <!-- x方向缩放2倍 -->
+        <y>5</y>    <!-- y方向缩放2倍 -->
+        <z>5</z>    <!-- z方向缩放2倍 -->
+      </scale>
+
+    </include>
+
+  </world>
+</sdf>

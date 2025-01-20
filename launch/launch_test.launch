@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <!-- 设置world文件的路径 -->
+  <arg name="world_file" default="$(find lias_ocean_sim)/worlds/my_world.world"/>
+
+  <!-- 设置是否启用GUI -->
+  <arg name="gui" default="true"/>
+
+  <!-- 设置是否以暂停状态启动 -->
+  <arg name="paused" default="false"/>
+  
+  <!-- 设置是否使用模拟时间 -->
+  <arg name="use_sim_time" default="true"/>
+
+  <!-- 加载empty_world.launch -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_file)"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+  </include>
+</launch>

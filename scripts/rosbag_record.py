@@ -41,16 +41,16 @@ def record_bag(topics, duration=None, output_path='./my_rosbags/session'):
 if __name__ == '__main__':
     # Define the topics to record
     topics = [
-        '/rexrov/imu',
-        # '/rexrov/rexrov/cameraleft/camera_image',
-        # '/rexrov/rexrov/cameraright/camera_image',
-        '/rexrov/blueview_p900/sonar_image',
-        '/rexrov/pose_gt'
+        '/rexrov/pose_gt',
+        '/rexrov/imu', # imu
+        '/rexrov/dvl_twist', # dvl
+        '/charuco_pose',   # camera
+        '/sim/sonar_data_with_pose' # sonar
     ]
 
     # Specify the output path and name
     # output_path = './record/vio/vio'
-    output_path = './record/sio/sio'
+    output_path = './record/rss/rss'
 
     # Start recording, change the duration as needed
     record_bag(topics, duration=60, output_path=output_path)  # Record for 3 seconds
