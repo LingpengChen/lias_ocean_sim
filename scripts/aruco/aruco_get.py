@@ -6,8 +6,8 @@ import numpy as np
 # 创建 ChArUco board
 dictionary = aruco.Dictionary_get(aruco.DICT_6X6_250)
 board = aruco.CharucoBoard_create(
-    squaresX=5,
-    squaresY=5,
+    squaresX=2,
+    squaresY=2,
     squareLength=0.1,
     markerLength=0.05,
     dictionary=dictionary
@@ -17,7 +17,7 @@ board = aruco.CharucoBoard_create(
 img = board.draw((800, 800))  # 生成800x800像素的图像
 
 # 保存图像
-# cv2.imwrite('charuco_board.png', img)
+cv2.imwrite('charuco_board_2_2.png', img)
 
 # 显示图像
 cv2.imshow('Charuco board', img)

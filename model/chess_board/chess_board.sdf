@@ -4,7 +4,8 @@
     <pose>0 0 0 0 0 0</pose>
     <static>true</static>
 
-    <link name="board"> 
+    <link name="board">
+      
       <visual name="visual">
         <cast_shadows>false</cast_shadows>
         <geometry>
@@ -21,6 +22,156 @@
         </material>
       </visual>
     </link>
+
+    <!-- 添加12个黑色小球 -->
+    <!-- 每个球的直径设为方格的1/4 -->
+  
+
+    <link name="sphere1">
+      <pose>0.15 0.4 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+    <link name="sphere1-2">
+      <pose>-0.15 0.4 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+  
+    <link name="sphere2">
+      <pose>0 0.6 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+  
+
+    <link name="sphere3-1">
+      <pose>0.15 0.8 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+   
+    <link name="sphere3-2">
+      <pose>-0.15 0.8 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+   
+    <link name="sphere4">
+      <pose>0 1 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+     <link name="sphere5-1">
+      <pose>0.15 1.2 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+   
+    <link name="sphere6-2">
+      <pose>-0.15 1.2 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.04</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+
+
+    <surface_props:material>rubber</surface_props:material>
+    <surface_props:biofouling_rating>0.1</surface_props:biofouling_rating>
+    <surface_props:roughness>0.1</surface_props:roughness>
+
   </model>
 </sdf>
 

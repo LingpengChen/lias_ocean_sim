@@ -16,7 +16,13 @@
 -->
 <sdf version="1.4">
   <world name="oceans_waves">
-  
+
+     <gui>
+      <camera name='user_camera'>
+        <pose>28 -16 -90 0 0.75 3.1</pose>
+      </camera>
+    </gui>
+
     <!-- real_time_update_rate smaller better cause 0.0990 and 0.0500 difference  -->
     <!-- max_step_size smaller better cause 0.0510 and 0.0500 difference  -->
     <physics name="default_physics" type="ode" default="true">
@@ -76,17 +82,10 @@
       <pose>0 0 -95 0 0 0</pose>
     </include>
 
-    <!-- Seabed terrain around Munkholmen model -->
-
-    <include>
-      <uri>model://herkules_ship_wreck</uri>
-      <pose>20 20 -100 0 0 0</pose>
-    </include>
-
     <include>
         <uri>model://chess_board</uri>
         <name>chess_board</name>
-        <pose>24 -20 -94 0 -0.9 0</pose>
+        <pose>24 -20 -94 0 -1.2 0</pose>
     </include>
         <!-- <pose>24 -20 -94.75 0 -0.9 0</pose> -->
    

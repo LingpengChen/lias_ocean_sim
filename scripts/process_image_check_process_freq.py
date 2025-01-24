@@ -107,8 +107,8 @@ class CharucoPoseEstimator:
         
         # 初始化相机参数 
         self.camera_matrix = np.array([
-            [772.98, 0, 320],
-            [0, 772.98, 240],
+            [1236.77, 0, 512.5],
+            [0, 1236.77, 384.5],
             [0, 0, 1]
         ], dtype=np.float32)
         self.dist_coeffs = np.zeros(5)
@@ -146,26 +146,27 @@ class CharucoPoseEstimator:
         self.T_w_b = pose_to_matrix( chess_board_link_state.link_state.pose )
 
         # 启动处理线程
-        self.processing_thread = threading.Thread(target=self.process_images)
+        self.processing_thread = threading.Thread(target=self.process_image_thread)
         self.processing_thread.daemon = True
         self.processing_thread.start()
 
     def callback(self, msg):
         """图像订阅回调函数"""
-        current_time = msg.header.stamp.to_sec()
+        # current_time = msg.header.stamp.to_sec()
         # if self.last_time is not None:
         #     # 计算时间差并转换为频率
         #     time_diff = current_time - self.last_time
         #     freq = 1.0 / time_diff
-        #     # rospy.loginfo(f"Current frequency: {freq:.2f} Hz, time_diff: {time_diff:.4f} s")
+        #     rospy.loginfo(f"Current frequency: {freq:.2f} Hz, time_diff: {time_diff:.4f} s")
         # self.last_time = current_time
             
         try:
             if self.image_queue.full():
                 self.image_queue.get()
                 rospy.loginfo("Error in image get: image queue is full!")
+            t_gt, r_gt = self.calculate_gt()
             cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-            self.image_queue.put((cv_image, msg.header.stamp, self.img_num))
+            self.image_queue.put((cv_image, msg.header.stamp, self.img_num, t_gt, r_gt))
             self.img_num += 1
         except Exception as e:
             rospy.logerr(f"Error in callback: {str(e)}")
@@ -233,62 +234,60 @@ class CharucoPoseEstimator:
         pose_msg.pose.orientation.w = quat[3]
 
         return pose_msg
+    
+    def calculate_gt(self):
+        camera_optical_link_state = self.get_link_state(link_name='rexrov::rexrov/cameraright_link', reference_frame='world')
+        T_w_c = pose_to_matrix( camera_optical_link_state.link_state.pose )
+        # print(f"camera pose: {quaternion_to_euler(camera_optical_link_state.link_state.pose.orientation)}")
+        
+        
+        chess_board_link_state = self.get_link_state(link_name='chess_board::board', reference_frame='world')
+        self.T_w_b = pose_to_matrix( chess_board_link_state.link_state.pose )
+        # print(f"Board pose: {quaternion_to_euler(chess_board_link_state.link_state.pose.orientation)}")
+        
+        # 绕y轴逆时针转90度 (π/2)
+        R_x = np.array([
+            [1, 0, 0],
+            [0, 0, -1],
+            [0, 1, 0]
+        ])
+        
+        Ry = np.array([
+            [0,  0, 1],
+            [0,  1, 0],
+            [-1, 0, 0]
+        ])
 
-    def process_images(self):
+        # 绕z轴ni时针转90度 (π/2)
+        Rz = np.array([
+            [0, -1, 0],
+            [1, 0, 0],
+            [0, 0, 1]
+        ])
+        R_w_c = np.linalg.inv(Rz) @ Ry @ T_w_c[:3, :3]
+        R_w_b = np.linalg.inv(Rz) @ Ry @ Ry @ self.T_w_b[:3, :3]
+        R_gt = R_w_c.T @ R_w_b
+        clp = np.array([
+            [0, 1, 0],
+            [1, 0, 0],
+            [0, 0, 1]
+        ])
+        R_gt = clp @ R_gt @ clp.T
+        
+        T_c_b = np.linalg.inv(T_w_c) @ self.T_w_b
+        t_temp = T_c_b[:3, 3]
+        t_gt = np.array([-t_temp[1]-0.25, -t_temp[2]-0.25, t_temp[0]]).reshape(3, 1)
+        r_gt, _ = cv2.Rodrigues(R_gt)    
+        
+        return t_gt, r_gt
+        
+
+    def process_image_thread(self):
         """处理图像队列的主循环"""
         while not rospy.is_shutdown():
             if not self.image_queue.empty():
-                image, timestamp, img_num = self.image_queue.get()
-                
-                # 获取thruster_7的pose
-                camera_optical_link_state = self.get_link_state(link_name='rexrov::rexrov/cameraright_link', reference_frame='world')
-                T_w_c = pose_to_matrix( camera_optical_link_state.link_state.pose )
-                # print(f"camera pose: {quaternion_to_euler(camera_optical_link_state.link_state.pose.orientation)}")
-                
-                
-                chess_board_link_state = self.get_link_state(link_name='chess_board::board', reference_frame='world')
-                self.T_w_b = pose_to_matrix( chess_board_link_state.link_state.pose )
-                # print(f"Board pose: {quaternion_to_euler(chess_board_link_state.link_state.pose.orientation)}")
-                
-                # 绕y轴逆时针转90度 (π/2)
-                R_x = np.array([
-                    [1, 0, 0],
-                    [0, 0, -1],
-                    [0, 1, 0]
-                ])
-                
-                Ry = np.array([
-                    [0,  0, 1],
-                    [0,  1, 0],
-                    [-1, 0, 0]
-                ])
-
-                # 绕z轴ni时针转90度 (π/2)
-                Rz = np.array([
-                    [0, -1, 0],
-                    [1, 0, 0],
-                    [0, 0, 1]
-                ])
-                R_w_c = np.linalg.inv(Rz) @ Ry @ T_w_c[:3, :3]
-                R_w_b = np.linalg.inv(Rz) @ Ry @ Ry @ self.T_w_b[:3, :3]
-                R_gt = R_w_c.T @ R_w_b
-                clp = np.array([
-                    [0, 1, 0],
-                    [1, 0, 0],
-                    [0, 0, 1]
-                ])
-                R_gt = clp @ R_gt @ clp.T
-                
-                T_c_b = np.linalg.inv(T_w_c) @ self.T_w_b
-                t_temp = T_c_b[:3, 3]
-                t_gt = np.array([-t_temp[1]-0.25, -t_temp[2]-0.25, t_temp[0]]).reshape(3, 1)
-                r_gt, _ = cv2.Rodrigues(R_gt)
-                # pose_msg = self.create_pose_msg(r, t, timestamp)
-                # self.pose_publisher.publish(pose_msg)
-                
-                
+                image, timestamp, img_num, t_gt, r_gt = self.image_queue.get()         
                 success, r_est, t_est = self.estimate_pose(image)
-                    
 
                 if success:
                     vis_image = visualize_charuco_pose(image, r_est, t_est, self.camera_matrix, self.dist_coeffs)
@@ -296,23 +295,24 @@ class CharucoPoseEstimator:
                     cv2.imshow('Pose Visualization', vis_image)
                     cv2.waitKey(1)
                     # rospy.loginfo(f"Img_num: {img_num}")
-                    t_est +=  np.array([[ 0.044], [-0.052], [-0.024]])
+                    # t_est +=  np.array([[ 0.044], [-0.052], [-0.024]])
                     pose_msg = self.create_pose_msg(r_est, t_est, timestamp)
                     self.pose_publisher.publish(pose_msg)
                     # rospy.loginfo(f"Published pose at time: {timestamp}")
                     
                     current_time = timestamp.to_sec()
+                    print("R_error:", ( r_gt.T - r_est.T), "\nT_error: ", (t_gt.T-t_est.T) )
+                    # print("R_error:", np.linalg.norm( r_gt.T - r_est.T), "\nT_error: ", np.linalg.norm(t_gt.T-t_est.T) )
                     if self.last_time is not None:
                         # 计算时间差并转换为频率
                         time_diff = current_time - self.last_time
                         freq = 1.0 / time_diff
-                        print("R_error:", np.linalg.norm( r_gt.T - r_est.T), "\nT_error: ", np.linalg.norm(t_gt.T-t_est.T) )
                         rospy.loginfo(f"Current frequency: {freq:.2f} Hz, time_diff: {time_diff:.4f} s ") 
                         # rospy.loginfo(f"  Ground_truth r: {r.T}, Estimated R: {rvec.T}")
                         # rospy.loginfo(f"  Ground_truth t: {np.linalg.norm(t)}, Estimated t: {np.linalg.norm(tvec)}")
                     self.last_time = current_time
-            # else:
-            #     rospy.sleep(0.01)
+            else:
+                rospy.sleep(0.05)
 
     def run(self):
         """运行节点"""

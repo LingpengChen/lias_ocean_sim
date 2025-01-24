@@ -42,10 +42,10 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:default_imu_macro>
 
-  <!-- Mount cameras -->
+  <!-- Mount cameras <origin xyz="1.15 0.2 0.4" rpy="0 0.4 0"/>--> 
   <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/camera/camera.xacro" />
-  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="right" update_rate="20" width="640" height="480">
-    <origin xyz="1.15 0.2 0.4" rpy="0 0.4 0"/>
+  <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="right" update_rate="10" width="1024" height="768">
+    <origin xyz="1.2 0 -0.65" rpy="0 0 0"/>
   </xacro:camera>
 
   <!-- <xacro:camera namespace="${namespace}" parent_link="${namespace}/base_link" suffix="left" update_rate="24" width="640" height="360">
@@ -65,19 +65,39 @@
     inertial_reference_frame="${inertial_reference_frame}" />
 
   <!-- sonar -->
-  <!-- <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/sonar/multibeam_sonar_blueview_p900.xacro" />
-  
-  <xacro:sonar_visualization_macro_no_blue_ray 
+  <xacro:include filename="$(find lias_ocean_sim)/urdf/sensor/sonar/multibeam_sonar_blueview_p900.xacro" />
+<!--   
+  <xacro:multibeam_blueview_p900_raster_macro 
+    name="blueview_p900" 
+    scale="1 1 1" 
+    debug="false" 
+    sonar_image_topic="sonar_image" 
+    sonar_image_raw_topic="sonar_image_raw" 
+    maxDistance="2" 
+    raySkips="0" 
+    plotScaler="0" 
+    sensorGain="0.02" 
+    writeLog="false" 
+    writeFrameInterval="5" 
+    artificialVehicleVibration="false"
+    constantReflectivity="false"
+    reflectivityDatabaseFile="variationalReflectivityDatabase.csv"
+    robot_link="${namespace}/base_link" 
+    ray_visual="true">
+    <origin xyz="1.2 0.4 -0.65" rpy="0 0 0"/>
+  </xacro:multibeam_blueview_p900_raster_macro> -->
+
+  <xacro:multibeam_blueview_p900_ray_macro 
     name="blueview_p900" 
     scale="1 1 1" 
     debug="false" 
     sonar_image_topic="sonar_image" 
     sonar_image_raw_topic="sonar_image_raw" 
     robot_name="rexrov" 
-    maxDistance="10" 
+    maxDistance="5" 
     raySkips="1" 
-    plotScaler="0" 
-    sensorGain="0.02" 
+    sensorGain="0.1" 
+    plotScaler="0.1" 
     writeLog="false" 
     writeFrameInterval="5" 
     gaussian_noise_mean="0.0" 
@@ -85,28 +105,6 @@
     fidelity="500" 
     robot_link="${namespace}/base_link" 
     ray_visual="true">
-    <origin xyz="1.2 0 -0.65" rpy="0 0 0"/>
-  </xacro:sonar_visualization_macro_no_blue_ray> -->
-
-  <!-- <xacro:sonar_visualization_macro 
-    name="blueview_p900" 
-    scale="1 1 1" 
-    debug="false" 
-    sonar_image_topic="sonar_image" 
-    sonar_image_raw_topic="sonar_image_raw" 
-    robot_name="rexrov" 
-    maxDistance="10" 
-    raySkips="1" 
-    plotScaler="0" 
-    sensorGain="0.02" 
-    writeLog="false" 
-    writeFrameInterval="5" 
-    gaussian_noise_mean="0.0" 
-    gaussian_noise_stddev="0.0" 
-    fidelity="500" 
-    robot_link="${namespace}/base_link" 
-    ray_visual="true">
-    <origin xyz="1.2 0 -0.65" rpy="0 0 0"/>
-  </xacro:sonar_visualization_macro> -->
-
+    <origin xyz="1.2 0.5 -0.65" rpy="0 0 0"/>
+  </xacro:multibeam_blueview_p900_ray_macro>
 </robot>

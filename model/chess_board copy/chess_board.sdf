@@ -26,29 +26,12 @@
     <!-- 添加12个黑色小球 -->
     <!-- 每个球的直径设为方格的1/4 -->
   
-    <link name="sphere1">
-      <pose>0.15 0.35 0 0 0 0</pose>
-      <visual name="visual">
-        <geometry>
-          <sphere>
-            <radius>0.03</radius>
-          </sphere>
-        </geometry>
-        <material>
-          <ambient>0 0 0 1</ambient>
-          <diffuse>0 0 0 1</diffuse>
-          <specular>0 0 0 1</specular>
-          <emissive>0 0 0 1</emissive>
-        </material>
-      </visual>
-    </link>
-
     <link name="sphere2">
-      <pose>0 0.35 0 0 0 0</pose>
+      <pose>0 0.5 0 0 0 0</pose>
       <visual name="visual">
         <geometry>
           <sphere>
-            <radius>0.03</radius>
+            <radius>0.02</radius>
           </sphere>
         </geometry>
         <material>
@@ -61,11 +44,11 @@
     </link>
    
     <link name="sphere3">
-      <pose>-0.15 0.35 0 0 0 0</pose>
+      <pose>0.5 0.5 0 0 0 0</pose>
       <visual name="visual">
         <geometry>
           <sphere>
-            <radius>0.03</radius>
+            <radius>0.02</radius>
           </sphere>
         </geometry>
         <material>
@@ -77,32 +60,12 @@
       </visual>
     </link>
 
-
-    
-
-    <link name="sphere7">
-      <pose>0.15 0.65 0 0 0 0</pose>
+    <link name="sphere4">
+      <pose>0.5 0 0 0 0 0</pose>
       <visual name="visual">
         <geometry>
           <sphere>
-            <radius>0.03</radius>
-          </sphere>
-        </geometry>
-        <material>
-          <ambient>0 0 0 1</ambient>
-          <diffuse>0 0 0 1</diffuse>
-          <specular>0 0 0 1</specular>
-          <emissive>0 0 0 1</emissive>
-        </material>
-      </visual>
-    </link>
-
-    <link name="sphere8">
-      <pose>0 0.65 0 0 0 0</pose>
-      <visual name="visual">
-        <geometry>
-          <sphere>
-            <radius>0.03</radius>
+            <radius>0.02</radius>
           </sphere>
         </geometry>
         <material>
@@ -114,12 +77,12 @@
       </visual>
     </link>
    
-    <link name="sphere9">
-      <pose>-0.15 0.65 0 0 0 0</pose>
+    <link name="sphere5">
+      <pose>0.5 -0.5 0 0 0 0</pose>
       <visual name="visual">
         <geometry>
           <sphere>
-            <radius>0.03</radius>
+            <radius>0.02</radius>
           </sphere>
         </geometry>
         <material>
@@ -130,10 +93,25 @@
         </material>
       </visual>
     </link>
-    <surface_props:material>rubber</surface_props:material>
-    <surface_props:biofouling_rating>0.1</surface_props:biofouling_rating>
-    <surface_props:roughness>0.1</surface_props:roughness>
 
+    <link name="sphere6">
+      <pose>0 -0.5 0 0 0 0</pose>
+      <visual name="visual">
+        <geometry>
+          <sphere>
+            <radius>0.02</radius>
+          </sphere>
+        </geometry>
+        <material>
+          <ambient>0 0 0 1</ambient>
+          <diffuse>0 0 0 1</diffuse>
+          <specular>0 0 0 1</specular>
+          <emissive>0 0 0 1</emissive>
+        </material>
+      </visual>
+    </link>
+   
+   
   </model>
 </sdf>
 

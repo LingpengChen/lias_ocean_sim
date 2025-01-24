@@ -1,6 +1,10 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
   <world name="underwater_world">
+    <physics name="default_physics" type="ode" default="true">
+      <real_time_update_rate>100</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+    </physics>
     <!-- 全局光源 -->
     <include>
       <uri>model://sun</uri>
@@ -17,14 +21,133 @@
     <include>
       <uri>model://chess_board</uri>
       <name>chess_board</name>
-      <pose>5 0 0 0 0 0</pose>
-      <scale>
-        <x>5</x>    <!-- x方向缩放2倍 -->
-        <y>5</y>    <!-- y方向缩放2倍 -->
-        <z>5</z>    <!-- z方向缩放2倍 -->
-      </scale>
+      <pose>3 0 1 0 1 0</pose>
 
     </include>
+
+    <!-- 地面 -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.8 0.8 0.8 1</ambient>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.8 0.8 0.8 1</specular>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 标记1 at (1,1,1) -->
+    <model name="marker1">
+      <static>true</static>
+      <pose>1 1 1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 标记2 at (2,1,1) -->
+    <model name="marker2">
+      <static>true</static>
+      <pose>2 1 1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 标记3 at (3,1,1) -->
+    <model name="marker3">
+      <static>true</static>
+      <pose>3 1 1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 标记4 at (4,1,1) -->
+    <model name="marker4">
+      <static>true</static>
+      <pose>4 1 1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- 标记5 at (5,1,1) -->
+    <model name="marker5">
+      <static>true</static>
+      <pose>5 1 1 0 0 0</pose>
+      <link name="link">
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.05 0.05 0.05</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>1 0 0 1</ambient>
+            <diffuse>1 0 0 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
 
   </world>
 </sdf>

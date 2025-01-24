@@ -68,6 +68,10 @@
           <constantReflectivity>${constantReflectivity}</constantReflectivity>
           <!-- The CSV databsefile is located at the worlds folder -->
           <reflectivityDatabaseFile>${reflectivityDatabaseFile}</reflectivityDatabaseFile>
+          <customSDFTagReflectivity>true</customSDFTagReflectivity>
+          <customSDFTagDatabaseFile>customSDFTagDatabase.csv</customSDFTagDatabaseFile>
+          
+
           <raySkips>${raySkips}</raySkips>
           <sensorGain>${sensorGain}</sensorGain>
           <plotScaler>${plotScaler}</plotScaler>
@@ -256,7 +260,7 @@
                params="name scale sonar_image_topic debug
                sonar_image_raw_topic maxDistance raySkips plotScaler sensorGain writeLog
                writeFrameInterval artificialVehicleVibration constantReflectivity
-               reflectivityDatabaseFile robot_link ray_visual">
+               reflectivityDatabaseFile robot_link ray_visual *origin">
     <xacro:multibeam_blueview_p900_link name="${name}" scale="${scale}"/>
     <joint name="multibeam_sonar_joint" type="fixed">
       <parent link="${robot_link}"/>

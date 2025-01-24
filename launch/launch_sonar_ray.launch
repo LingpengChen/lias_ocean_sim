@@ -11,20 +11,20 @@
   <arg name="sonar_y" default="0"/>
   <arg name="sonar_z" default="1"/>
   <arg name="sonar_roll" default="0"/>
-  <arg name="sonar_pitch" default="0.25"/>
+  <arg name="sonar_pitch" default="0"/>
   <arg name="sonar_yaw" default="0"/>
 
     <arg name="gpu_ray" default="true"/>
 
-    <arg name="maxDistance" default="10"/>
+    <arg name="maxDistance" default="5"/>
     <arg name="raySkips" default="1"/>
     <arg name="sonar_scale" default="'1 1 1'"/>
     <arg name="sonar_image_topic" default="sonar_image"/>
     <arg name="sonar_image_raw_topic" default="sonar_image_raw"/>
     <arg name="ray_visual" default="true"/>
 
-    <arg name="plotScaler" default="0"/>
-    <arg name="sensorGain" default="0.04"/>
+    <arg name="plotScaler" default="0.1"/>
+    <arg name="sensorGain" default="0.1"/>
     <arg name="writeLog" default="false"/>
     <arg name="writeFrameInterval" default="5"/>
 

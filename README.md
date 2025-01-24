@@ -4,6 +4,9 @@ roslaunch lias_ocean_sim launch_rexrov.launch
 roslaunch uuv_control_cascaded_pid joy_velocity.launch uuv_name:=rexrov model_name:=rexrov joy_id:=0
 roslaunch uuv_control_cascaded_pid key_board_velocity.launch uuv_name:=rexrov model_name:=rexrov 
 
+
+pip3 install opencv-contrib-python==3.4.18.65
+
 /home/clp/catkin_ws/src/uuv_simulator/uuv_sensor_plugins/uuv_sensor_ros_plugins/urdf/dvl_snippets.xacro 
 
 ---

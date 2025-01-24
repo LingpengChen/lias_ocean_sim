@@ -1,14 +1,14 @@
 <launch>
 
-  <arg name="x" default="20"/>
-  <arg name="y" default="-20"/>
-  <arg name="z" default="-93"/>
+  <arg name="x" default="20.5"/>
+  <arg name="y" default="-21"/>
+  <arg name="z" default="-93.4"/>
   <arg name="namespace" default="rexrov"/>
   <arg name="debug" default="0"/>
 
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
-  <arg name="yaw" default="0.0"/>
+  <arg name="yaw" default="0.3"/>
 
   <arg name="use_ned_frame" default="false"/>
 
