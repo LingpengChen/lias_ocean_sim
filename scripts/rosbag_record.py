@@ -41,11 +41,11 @@ def record_bag(topics, duration=None, output_path='./my_rosbags/session'):
 if __name__ == '__main__':
     # Define the topics to record
     topics = [
-        '/rexrov/pose_gt',
-        '/rexrov/imu', # imu
-        '/rexrov/dvl_twist', # dvl
-        '/charuco_pose',   # camera
-        '/sim/sonar_data_with_pose' # sonar
+        '/rexrov/pose_gt',  # pose ground truth nav_msgs/Odometry
+        '/rexrov/imu', # sensor_msgs/Imu
+        '/rexrov/dvl_twist', # dvl geometry_msgs/TwistWithCovarianceStamped
+        '/charuco_pose',   # camera  geometry_msgs/PoseStamped
+        '/preprocessed_sonar_data' # sonar SonarData
     ]
 
     # Specify the output path and name

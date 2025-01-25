@@ -121,7 +121,7 @@
               <max_angle>0.52</max_angle>
             </horizontal>
             <!-- Set vertical FOV by setting image height -->
-            <!-- Approx 2 times the spec sheet (sepc: 20 deg.) -->
+            <!-- Approx 2 times the spec sheet (sepc: 30 deg.) -->
             <vertical>
               <samples>96</samples>
               <resolution>1</resolution>
@@ -160,7 +160,7 @@
           <sonarFreq>100e4</sonarFreq>
           <bandwidth>15e4</bandwidth>
           <soundSpeed>1500</soundSpeed>
-          <sourceLevel>185</sourceLevel>
+          <sourceLevel>190</sourceLevel>
           <maxDistance>${maxDistance}</maxDistance>
 
           <!-- <verticalFOV>20</verticalFOV>
@@ -219,16 +219,16 @@
         <ray>
           <scan>
             <horizontal>
-              <samples>100</samples>
+              <samples>5</samples>
               <resolution>1</resolution>
-              <min_angle>-0.785398</min_angle>
-              <max_angle>0.785398</max_angle>
+              <min_angle>-0.52</min_angle>
+              <max_angle>0.52</max_angle>
             </horizontal>
             <vertical>
               <samples>3</samples>
               <resolution>1</resolution>
-              <min_angle>-0.174533</min_angle>
-              <max_angle>0.174533</max_angle>
+              <min_angle>-0.26</min_angle>
+              <max_angle>0.26</max_angle>
             </vertical>
           </scan>
           <range>

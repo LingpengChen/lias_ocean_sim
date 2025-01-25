@@ -12,10 +12,20 @@ import cv2.aruco as aruco
 from gazebo_msgs.srv import GetLinkState
 import tf.transformations
 import tf
+from lias_ocean_sim.msg import SonarData
 
 import numpy as np
 from scipy.spatial.transform import Rotation
 
+def matrix_to_xyz_rpy(T):
+    # 提取平移向量
+    xyz = T[:3, 3]
+    
+    # 提取旋转矩阵并用cv2转换
+    R = T[:3, :3]
+    rpy = np.array(cv2.RQDecomp3x3(R)[0]) * np.pi/180
+    
+    return xyz, rpy
 
 def pose_to_matrix(pose: Pose) -> np.ndarray:
     quaternion = [pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]
@@ -134,12 +144,11 @@ class Sonar_preprocessor:
         self.image_queue = Queue(maxsize=10)
         self.bridge = CvBridge()
         
+        self.out = None
         # 初始化ROS订阅者和发布者
         self.subscriber = rospy.Subscriber('/rexrov/blueview_p900/sonar_image', Image, self.callback)
 
-        self.pose_publisher = rospy.Publisher('/charuco_pose', 
-                                            PoseStamped, 
-                                            queue_size=10)
+        self.sonar_data_pub = rospy.Publisher('/preprocessed_sonar_data', SonarData, queue_size=10)
         
         # 等待服务可用
         rospy.wait_for_service('/gazebo/get_link_state')
@@ -158,6 +167,9 @@ class Sonar_preprocessor:
         ones = np.ones((marking_pts_b.shape[0], 1))
         marking_pts_b_aug = np.hstack((marking_pts_b, ones))
         self.marking_pts_w = self.T_w_b @ marking_pts_b_aug.T
+        # self.marking_pts_w = np.hstack((self.marking_pts_w, np.array([[2], [0], [-2], [1]])))
+        print("World points")
+        print( self.marking_pts_w.T )
         # self.marking_pts_w = (self.T_w_b @ marking_pts_b_aug.T)[0:3, :]
         
         # 启动处理线程
@@ -177,11 +189,13 @@ class Sonar_preprocessor:
                             [0,1,0,0.5],
                             [0,0,1,-0.65],
                             [0,0,0,1]]) # 1.2 0.5 -0.65
-        T_w_sonar = T_r_s @ T_w_robot
+        T_w_sonar = T_w_robot @ T_r_s 
+        xyz, rpy = matrix_to_xyz_rpy(T_w_sonar)
+        # print(f"sonar: xyz: [{xyz[0]:.2f}, {xyz[1]:.2f}, {xyz[2]:.2f}], rpy: [{rpy[0]:.2f}, {rpy[1]:.2f}, {rpy[2]:.2f}]")
         # print(T_w_sonar)
         # print(T_w_robot)
         img_gt, distances_gt, theta_gt = plot_gt_sonar(self.marking_pts_w, T_w_sonar)
-        return img_gt, distances_gt, theta_gt
+        return img_gt, distances_gt, theta_gt, xyz, rpy
                 
     def callback(self, msg: Image):
         """图像订阅回调函数"""
@@ -202,16 +216,38 @@ class Sonar_preprocessor:
             cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
            
             self.image_queue.put((cv_image, msg.header.stamp, robot_link_state.link_state.pose))
+            
+            
+            # 如果VideoWriter还没初始化，则初始化它
+            if self.out is None:
+                height, width = cv_image.shape[:2]
+                self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+                self.out = cv2.VideoWriter('output.mp4', self.fourcc, 30.0, (width, height))
+            
+            # 写入帧
+            self.out.write(cv_image)
+            
         except Exception as e:
             rospy.logerr(f"Error in callback: {str(e)}")
 
-
+    def __publish_sonar_data(self, timestamp, distances_gt, theta_gt, xyz, rpy):
+        msg = SonarData()  
+        msg.header.stamp = timestamp
+        # 设置距离数组
+        msg.distances_gt = distances_gt.astype(np.float32).tolist() 
+        # 设置角度数组
+        msg.theta_gt = theta_gt.astype(np.float32).tolist() 
+        # 设置位姿 [x,y,z,roll,pitch,yaw]
+        msg.pose = np.hstack((xyz, rpy)).astype(np.float32).tolist()
+        # 示例数据
+        self.sonar_data_pub.publish(msg)
+        
     def preprocess_sonar_image_thread(self):
         """处理图像队列的主循环"""
         while not rospy.is_shutdown():
             if not self.image_queue.empty():
                 sonar_image, timestamp, pose_gt = self.image_queue.get()
-                keypoints, result_image = extract_sonar_features(sonar_image)
+                # keypoints, result_image = extract_sonar_features(sonar_image)
 
                 
                 current_time = timestamp.to_sec()
@@ -222,11 +258,13 @@ class Sonar_preprocessor:
                     rospy.loginfo(f"Current frequency: {freq:.2f} Hz, time_diff: {time_diff:.4f} s")
                 self.last_time = current_time
                 
-                img_gt, distances_gt, theta_gt = self.calculate_gt(pose_gt)
+                img_gt, distances_gt, theta_gt, xyz, rpy = self.calculate_gt(pose_gt)
                 # image_resized = cv2.resize(image, target_size)
                 # img_gt_resized = cv2.resize(img_gt, target_size)
-                # print(distances_gt, theta_gt)
-                combined_img = cv2.hconcat([result_image, img_gt])
+                print(distances_gt)
+                print(theta_gt)
+                self.__publish_sonar_data(timestamp, distances_gt, theta_gt, xyz, rpy)
+                combined_img = cv2.hconcat([sonar_image, img_gt])
                 cv2.imshow('Image View', combined_img)
                 cv2.waitKey(1)
                     
