@@ -22,10 +22,10 @@ def extract_sonar_features(image):
     blurred = cv2.GaussianBlur(image, (0,0), sigmaX=5, sigmaY=2)
 
     # # 对比度增强
-    # # alpha = 1.5  # 对比度增强因子
-    # # beta = 10    # 亮度增加值
-    # # enhanced = cv2.convertScaleAbs(denoised, alpha=alpha, beta=beta)
-    clahe = cv2.createCLAHE(clipLimit=1.0, tileGridSize=(10,10))
+    # alpha = 3  # 对比度增强因子
+    # beta = 0    # 亮度增加值
+    # enhanced = cv2.convertScaleAbs(blurred, alpha=alpha, beta=beta)
+    clahe = cv2.createCLAHE(clipLimit=5.0, tileGridSize=(10,10))
     enhanced = clahe.apply(blurred)
     
     # result = cv2.addWeighted(image, 1.0, blurred, -1.0, 0)
@@ -51,20 +51,23 @@ def extract_sonar_features(image):
     filtered_keypoints = []
     for kp in keypoints:
         # 可以根据实际情况调整这些阈值
-        if kp.response > 0.02 and 3 < kp.size < 20:
+        # if kp.response > 0.01:
+        if kp.response > 0.001 and 10 < kp.size < 12:
             filtered_keypoints.append(kp)
     
     # 4. 绘制结果
     result = cv2.drawKeypoints(image, filtered_keypoints, None, 
                              color=(0,255,0), 
                              flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    cv2.imshow('Image temp', result)
+    cv2.waitKey(0)
     
     return filtered_keypoints, result
 
 
 # 使用示例
 # 读取图像时直接转换为灰度图
-sonar_image = cv2.imread('output_1.png')
+sonar_image = cv2.imread('output_5.png')
 
 keypoints, result_image = extract_sonar_features(sonar_image)
 combined_img = cv2.hconcat([sonar_image, result_image])
