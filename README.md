@@ -5,6 +5,10 @@ roslaunch uuv_control_cascaded_pid joy_velocity.launch uuv_name:=rexrov model_na
 roslaunch uuv_control_cascaded_pid key_board_velocity.launch uuv_name:=rexrov model_name:=rexrov 
 
 
+roslaunch uuv_control_cascaded_pid predefined_velocity.launch  uuv_name:=rexrov model_name:=rexrov 
+rosrun uuv_control_cascaded_pid run_trajectory.py 
+rosrun uuv_control_cascaded_pid run_trajectory_stop.py
+
 pip3 install opencv-contrib-python==3.4.18.65
 
 /home/clp/catkin_ws/src/uuv_simulator/uuv_sensor_plugins/uuv_sensor_ros_plugins/urdf/dvl_snippets.xacro 

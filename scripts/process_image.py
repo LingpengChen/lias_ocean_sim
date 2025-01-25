@@ -165,6 +165,7 @@ class CharucoPoseEstimator:
                 self.image_queue.get()
                 rospy.loginfo("Error in image get: image queue is full!")
             t_gt, r_gt = self.calculate_gt()
+            # print(t_gt)
             cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
             self.image_queue.put((cv_image, msg.header.stamp, self.img_num, t_gt, r_gt))
             self.img_num += 1
